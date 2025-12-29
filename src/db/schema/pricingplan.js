@@ -3,24 +3,30 @@ import {
   serial,
   text,
   boolean,
-  jsonb,
   pgEnum,
+  varchar,
+  integer,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "./columnHelper.js";
+import { sql } from "drizzle-orm";
 
 export const tierEnum = pgEnum("tier", ["free", "pro", "enterprise"]);
 
-// Using JSONB for flexible structure
 export const pricingPlansTable = pgTable("pricing_plans", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  price: jsonb("price").notNull(),
-  // Structure: { monthly: number, yearly: number, currency: string }
+  name: varchar("name", { length: 255 }).notNull(),
+  monthlyPrice: integer("monthly_price").notNull(),
+  yearlyPrice: integer("yearly_price").notNull(),
+  currency: varchar("currency", { length: 5 }).notNull().default("INR"),
   description: text("description").notNull(),
-  features: text("features").array().notNull(),
+  features: varchar("features", { length: 30 })
+    .array()
+    .notNull()
+    .default(sql`'{}'::varchar[]`),
   tier: tierEnum("tier").notNull(),
   isPopular: boolean("is_popular").default(false).notNull(),
-  limits: jsonb("limits").notNull(),
-  // Structure: { repositories: number, contributors: number, commitsPerContributor: number }
+  repositories: integer("repositories").notNull(),
+  contributors: integer("contributors").notNull(),
+  commitsPerContributor: integer("commits_per_contributor").notNull(),
   ...timestamps,
 });

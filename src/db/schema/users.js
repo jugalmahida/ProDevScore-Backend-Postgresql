@@ -4,7 +4,8 @@ import {
   pgEnum,
   pgTable,
   serial,
-  text,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { timestamps } from "./columnHelper.js";
@@ -14,20 +15,20 @@ export const authProviderEnum = pgEnum("authProvider", ["Email", "Github"]);
 
 export const usersTable = pgTable("users", {
   id: serial("id").primaryKey(),
-  fullName: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  password: text("password"),
+  fullName: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 100 }).notNull().unique(),
+  password: varchar("password", { length: 255 }),
   role: roleEnum(),
-  refresh_token: text("refresh_token"),
+  refresh_token: varchar("refresh_token", { length: 200 }),
   isVerified: integer("isVerified").default(0),
   verificationCode: integer("isVerified"),
-  expiresCodeAt: date("expiresCodeAt"),
-  forgetPasswordToken: text("forgetPasswordToken"),
-  forgetPasswordTokenExpiry: text("forgetPasswordTokenExpiry"),
-  githubId: text("githubId").unique(),
-  privateRepos: text("privateRepos")
+  expiresCodeAt: timestamp("expiresCodeAt"),
+  forgetPasswordToken: varchar("forgetPasswordToken", { length: 200 }),
+  forgetPasswordTokenExpiry: timestamp("forgetPasswordTokenExpiry"),
+  githubId: varchar("githubId", { length: 20 }).unique(),
+  privateRepos: varchar("privateRepos", { length: 50 })
     .array()
-    .default(sql`'{}'::text[]`),
+    .default(sql`'{}'::varchar[]`),
   authProvider: authProviderEnum(),
   ...timestamps,
 });

@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { setupErrorHandling } from "./config/errors.config.js";
 import { AppConstants } from "./utils/Constants.js";
+import { setupRoutes } from "./config/routes.config.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.get(`/api/${process.env.VERSION}/health`, (req, res) => {
   });
 });
 
+setupRoutes(app);
 setupErrorHandling(app);
 
 app.listen(process.env.PORT, () => {
