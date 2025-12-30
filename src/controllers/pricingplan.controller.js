@@ -41,25 +41,24 @@ export const getPricingPlanById = asyncHandler(async (req, res, next) => {
 });
 
 // Update a Pricing Plan by ID
-// export const updatePricingPlan = asyncHandler(async (req, res, next) => {
-//   const plan = await PricingPlan.findById(req.params.id);
-//   if (!plan) {
-//     return next(AppError.notFound("Pricing plan not found"));
-//   }
+export const updatePricingPlan = asyncHandler(async (req, res, next) => {
+  // req.body & req.params is already validated in the middleware
+  const plan = await updatePricingPlanQuery(req.body, req.params.id);
 
-//   Object.assign(plan, req.body);
-//   await plan.save();
+  if (!plan) {
+    return next(AppError.notFound("Pricing plan not found"));
+  }
 
-//   AppSuccess.ok(plan).send(res);
-// });
+  AppSuccess.ok(plan).send(res);
+});
 
 // Delete a Pricing Plan by ID
-// export const deletePricingPlan = asyncHandler(async (req, res, next) => {
-//   const plan = await PricingPlan.findById(req.params.id);
-//   if (!plan) {
-//     return next(AppError.notFound("Pricing plan not found"));
-//   }
+export const deletePricingPlan = asyncHandler(async (req, res, next) => {
+  const plan = await deletePricingPlanQuery(req.params.id);
 
-//   await plan.remove();
-//   AppSuccess.ok({ message: "Pricing plan deleted successfully" }).send(res);
-// });
+  if (!plan) {
+    return next(AppError.notFound("Pricing plan not found"));
+  }
+
+  AppSuccess.ok("Pricing plan deleted successfully").send(res);
+});

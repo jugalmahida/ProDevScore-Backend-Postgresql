@@ -28,5 +28,8 @@ export const pricingPlansTable = pgTable("pricing_plans", {
   repositories: integer("repositories").notNull(),
   contributors: integer("contributors").notNull(),
   commitsPerContributor: integer("commits_per_contributor").notNull(),
+  maxCommits: integer("max_commits").generatedAlwaysAs(
+    sql`"contributors" * "commits_per_contributor"`
+  ),
   ...timestamps,
 });

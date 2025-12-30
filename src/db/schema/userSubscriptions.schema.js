@@ -1,7 +1,7 @@
 import { date, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { usersTable } from "./users.js";
-import { pricingPlansTable } from "./pricingplan.js";
+import { usersTable } from "./users.schema.js";
+import { pricingPlansTable } from "./pricingplan.schema.js";
 import { timestamps } from "./columnHelper.js";
 
 export const userSubscriptions = pgTable("user_subscriptions", {

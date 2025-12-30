@@ -1,5 +1,4 @@
 import {
-  date,
   integer,
   pgEnum,
   pgTable,
@@ -18,17 +17,17 @@ export const usersTable = pgTable("users", {
   fullName: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 100 }).notNull().unique(),
   password: varchar("password", { length: 255 }),
-  role: roleEnum(),
+  role: roleEnum().default("user"),
   refresh_token: varchar("refresh_token", { length: 200 }),
-  isVerified: integer("isVerified").default(0),
-  verificationCode: integer("isVerified"),
-  expiresCodeAt: timestamp("expiresCodeAt"),
-  forgetPasswordToken: varchar("forgetPasswordToken", { length: 200 }),
-  forgetPasswordTokenExpiry: timestamp("forgetPasswordTokenExpiry"),
-  githubId: varchar("githubId", { length: 20 }).unique(),
-  privateRepos: varchar("privateRepos", { length: 50 })
+  isVerified: integer("is_verified").default(0),
+  verificationCode: integer("verification_code"),
+  expiresCodeAt: timestamp("expires_code_at"),
+  forgetPasswordToken: varchar("forget_password_token", { length: 200 }),
+  forgetPasswordTokenExpiry: timestamp("forget_password_token_expiry"),
+  githubId: varchar("github_id", { length: 20 }).unique(),
+  privateRepos: varchar("private_repos", { length: 50 })
     .array()
     .default(sql`'{}'::varchar[]`),
-  authProvider: authProviderEnum(),
+  authProvider: authProviderEnum().default("Email"),
   ...timestamps,
 });

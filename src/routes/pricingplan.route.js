@@ -3,14 +3,17 @@ import {
   createPricingPlan,
   getAllPricingPlans,
   getPricingPlanById,
+  updatePricingPlan,
+  deletePricingPlan,
 } from "../controllers/pricingplan.controller.js";
 
 import {
   createPricingPlanValidationSchema,
-  getPricingPlanByIdValidationSchema,
-} from "../validations/pricingplan.js";
+  pricingPlanIdValidationSchema,
+  updatePricingPlanValidationSchema,
+} from "../validations/pricingplan.validation.js";
 
-import { validate } from "../middleware/validation.js";
+import { validate } from "../middleware/validation.middleware.js";
 
 const router = express.Router();
 
@@ -18,18 +21,31 @@ router.get("/", getAllPricingPlans);
 
 router.post(
   "/",
-  validate(createPricingPlanValidationSchema),
+  validate({ body: createPricingPlanValidationSchema }),
   createPricingPlan
 );
 
 router.get(
   "/:id",
-  validate(getPricingPlanByIdValidationSchema),
+  validate({ params: pricingPlanIdValidationSchema }),
   getPricingPlanById
 );
 
-// router.put("/:id", updatePricingPlan);
+router.put(
+  "/:id",
+  validate({
+    // This will validate the ID
+    params: pricingPlanIdValidationSchema,
+    // This will validate the body
+    body: updatePricingPlanValidationSchema,
+  }),
+  updatePricingPlan
+);
 
-// router.delete("/:id", deletePricingPlan);
+router.delete(
+  "/:id",
+  validate({ params: pricingPlanIdValidationSchema }),
+  deletePricingPlan
+);
 
 export default router;

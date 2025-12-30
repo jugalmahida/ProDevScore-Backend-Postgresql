@@ -8,8 +8,9 @@ export class AppSuccess {
     this.success = true;
     this.statusCode = statusCode;
 
-    // Calculate results count safely
-    this.results = Array.isArray(data) ? data.length : data ? 1 : 0;
+    // Calculate results count, if count is 1 then doesn't pass in result else pass in results ( count > 1)
+    this.count =
+      Array.isArray(data) && data.length > 1 ? data.length : undefined;
     this.data = data;
 
     // Add pagination info if provided
@@ -20,10 +21,10 @@ export class AppSuccess {
       this.filters = filters;
     }
     // Additional debugging info in development
-    if (process.env.NODE_ENV === "development") {
-      this.timestamp = new Date().toISOString();
-      this.requestId = this.generateRequestId();
-    }
+    // if (process.env.NODE_ENV === "development") {
+    //   this.timestamp = new Date().toISOString();
+    //   this.requestId = this.generateRequestId();
+    // }
   }
 
   // Generate unique request ID for debugging
@@ -48,7 +49,7 @@ export class AppSuccess {
   toResponse() {
     const response = {
       success: this.success,
-      count: this.results,
+      count: this.count,
     };
 
     // Include data if it exists
